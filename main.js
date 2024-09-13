@@ -6,47 +6,49 @@ function getSecretNumber() {
     return Math.floor((Math.random() * 10) + 1);
 }
 
-function exibeTextoTag(tag, texto) {
-    let varTag = document.querySelector(tag);
+function exibeTextoTag(id, texto) {
+    let varTag = document.getElementById(id);
     if (varTag) {
         varTag.innerHTML = texto;
         responsiveVoice.speak(texto, 'UK English Male', { pitch: 2 });
     } else {
-        console.error(`Tag ${tag} não encontrada.`);
+        console.error(`ID ${id} não encontrado.`);
     }
 }
 
 function atualizaTentativasRestantes() {
     let tentativasRestantes = MAX_TENTATIVAS - tentativas;
-    exibeTextoTag('p', `Tentativas restantes: ${tentativasRestantes}`);
+    exibeTextoTag('tentativas', `Tentativas restantes: ${tentativasRestantes}`);
 }
 
 function inicializaTexto() {
-    exibeTextoTag('h1', 'Secret Number');
-    exibeTextoTag('p', 'Type a number between 1 and 10');
+    exibeTextoTag('mensagem', 'Número Secreto');
+    exibeTextoTag('tentativas', 'Digite um número entre 1 e 10');
     atualizaTentativasRestantes(); // Atualiza as tentativas restantes ao inicializar
 }
 
 function verificarChute() {
     let guess = parseInt(document.querySelector('input').value);
+    console.log('Chute:', guess);
+    console.log('Número secreto:', secret_number);
 
     if (isNaN(guess)) {
-        exibeTextoTag('p', 'Por favor, insira um número válido.');
+        exibeTextoTag('tentativas', 'Por favor, insira um número válido.');
         return;
     }
 
     if (guess === secret_number) {
-        exibeTextoTag('h1', 'Parabéns, você acertou!');
+        exibeTextoTag('mensagem', 'Parabéns, você acertou!');
         document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
         if (tentativas >= MAX_TENTATIVAS - 1) {
-            exibeTextoTag('h1', 'Número máximo de tentativas atingido. O número era ' + secret_number + '.');
+            exibeTextoTag('mensagem', 'Número máximo de tentativas atingido. O número era ' + secret_number + '.');
             document.getElementById('reiniciar').removeAttribute('disabled');
         } else {
             if (guess < secret_number) {
-                exibeTextoTag('p', 'Tente novamente, o número é maior!');
+                exibeTextoTag('tentativas', 'Tente novamente, o número é maior!');
             } else {
-                exibeTextoTag('p', 'Tente novamente, o número é menor!');
+                exibeTextoTag('tentativas', 'Tente novamente, o número é menor!');
             }
         }
     }
