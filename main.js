@@ -8,8 +8,12 @@ function getSecretNumber() {
 
 function exibeTextoTag(tag, texto) {
     let varTag = document.querySelector(tag);
-    varTag.innerHTML = texto;
-    responsiveVoice.speak(texto, 'UK English Male', { pitch: 2 });
+    if (varTag) {
+        varTag.innerHTML = texto;
+        responsiveVoice.speak(texto, 'UK English Male', { pitch: 2 });
+    } else {
+        console.error(`Tag ${tag} não encontrada.`);
+    }
 }
 
 function atualizaTentativasRestantes() {
@@ -25,6 +29,11 @@ function inicializaTexto() {
 
 function verificarChute() {
     let guess = parseInt(document.querySelector('input').value);
+
+    if (isNaN(guess)) {
+        exibeTextoTag('p', 'Por favor, insira um número válido.');
+        return;
+    }
 
     if (guess === secret_number) {
         exibeTextoTag('h1', 'Parabéns, você acertou!');
